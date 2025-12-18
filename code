@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>特工任務：校園手機攻防戰 (大字投影版)</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&display=swap');
+        
+        html { font-size: 22px; } /* 投影專用超大基準字體 */
+        
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #020617;
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+
+        .neon-green { color: #10b981; text-shadow: 0 0 15px rgba(16, 185, 129, 0.6); }
+        .neon-orange { color: #f97316; text-shadow: 0 0 15px rgba(249, 115, 22, 0.6); }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            background: rgba(15, 23, 42, 0.9);
+            border-radius: 3rem;
+            padding: 2.5rem;
+            border: 4px solid #1e293b;
+        }
+
+        .card-map {
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            border-width: 4px;
+        }
+        .card-map:hover { transform: scale(1.1); background-color: #1e293b; z-index: 10; }
+
+        .writing-option-active {
+            @apply border-orange-500 bg-orange-900/80 ring-8 ring-orange-500/20 text-white scale-105;
+        }
+
+        .progress-bar-inner {
+            transition: width 0.5s ease-in-out;
+        }
+
+        /* Animations */
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slide { animation: slideIn 0.6s ease-out forwards; }
+    </style>
+
+    <!-- 
+        Application Structure Plan:
+        1. MISSION BRIEFING: Large-scale visual hook based on "Zombie vs Warrior" scenario.
+        2. GLOBAL RADAR: 8-region grid mapping all intelligence from the PDF.
+        3. INTELLIGENCE HUB: PISA data and national security implications (Cyber Security).
+        4. LOGIC TRAINING (QUIZ): 5-step quiz with a dynamic progress bar for classroom interaction.
+        5. ARGUMENT LAB 3.0: High-contrast builder with specific counter-arguments from the PDF.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="p-4 md:p-12">
+
+    <!-- Header & Hero -->
+    <header class="mb-32 text-center animate-slide">
+        <div class="inline-block px-10 py-3 rounded-full border-4 border-orange-500 text-orange-500 text-2xl font-black mb-10 tracking-[0.3em] uppercase">
+            TOP SECRET: AGENT MISSION
+        </div>
+        <h1 class="text-8xl md:text-[10rem] font-black mb-10 leading-none tracking-tighter italic">
+            校園手機<br><span class="neon-green">全球情報戰</span>
+        </h1>
+        <p class="text-4xl text-slate-400 max-w-5xl mx-auto font-bold leading-tight mb-12">
+            分析 8 國情報，在「自由」與「紀律」之間，<br>構建你的議論文鋼鐵防線！
+        </p>
+        
+        <!-- Zombie vs Warrior Visual Wrapper -->
+        <div class="flex justify-center gap-10 mt-16 max-w-6xl mx-auto">
+            <div class="flex-1 bg-red-900/20 p-8 rounded-3xl border-2 border-red-500/30">
+                <div class="text-6xl mb-4">🧟‍♂️</div>
+                <h4 class="text-red-400 font-black text-2xl">手機喪屍</h4>
+                <p class="text-lg text-slate-500">連結了世界，卻斷線了彼此。</p>
+            </div>
+            <div class="flex-1 bg-emerald-900/20 p-8 rounded-3xl border-2 border-emerald-500/30">
+                <div class="text-6xl mb-4">🛡️</div>
+                <h4 class="text-emerald-400 font-black text-2xl">未來戰士</h4>
+                <p class="text-lg text-slate-500">駕馭科技，而非被科技奴役。</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Section 1: Interactive World Radar (8 Regions) -->
+    <section class="mb-40">
+        <div class="text-center mb-16">
+            <h2 class="text-6xl font-black text-white inline-block bg-slate-800 px-12 py-6 rounded-[3rem] shadow-2xl border-b-8 border-orange-600">
+                🗺️ 全球情報雷達 (Intel)
+            </h2>
+        </div>
+        
+        <!-- Grid optimized for 8 items -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-16 max-w-7xl mx-auto">
+            <div onclick="reveal('france')" class="card-map bg-slate-900 p-10 rounded-[3rem] border-slate-700 text-center hover:border-blue-500">
+                <div class="text-8xl mb-4">🇫🇷</div>
+                <div class="text-3xl font-black">法國</div>
+                <div class="text-sm text-blue-500 mt-2 font-black uppercase tracking-widest">數碼避風港</div>
+            </div>
+            <div onclick="reveal('china')" class="card-map bg-slate-900 p-10 rounded-[3rem] border-slate-700 text-center hover:border-red-500">
+                <div class="text-8xl mb-4">🇨🇳</div>
+                <div class="text-3xl font-black">中國</div>
+                <div class="text-sm text-red-500 mt-2 font-black uppercase tracking-widest">五項管理</div>
+            </div>
+            <div onclick="reveal('netherlands')" class="card-map bg-slate-900 p-10 rounded-[3rem] border-slate-700 text-center hover:border-orange-500">
+                <div class="text-8xl mb-4">🇳🇱</div>
+                <div class="text-3xl font-black">荷蘭</div>
+                <div class="text-sm text-orange-500 mt-2 font-black uppercase tracking-widest">專注社交</div>
+            </div>
+            <div onclick="reveal('singapore')" class="card-map bg-slate-900 p-10 rounded-[3rem] border-slate-700 text-center hover:border-emerald-500">
+                <div class="text-8xl mb-4">🇸🇬</div>
+                <div class="text-3xl font-black">新加坡</div>
+                <div class="text-sm text-emerald-500 mt-2 font-black uppercase tracking-widest">斷網重連</div>
+            </div>
+            <div onclick="reveal('uk')" class="card-map bg-slate-900 p-10 rounded-[3rem] border-slate-700 text-center hover:border-indigo-500">
+                <div class="text-8xl mb-4">🇬🇧</div>
+                <div class="text-3xl font-black">英國</div>
+                <div class="text-sm text-indigo-500 mt-2 font-black uppercase tracking-widest">重建權威</div>
+            </div>
+            <div onclick="reveal('estonia')" class="card-map bg-slate-800 p-10 rounded-[3rem] border-slate-700 text-center hover:border-cyan-400">
+                <div class="text-8xl mb-4">🇪🇪</div>
+                <div class="text-3xl font-black">愛沙尼亞</div>
+                <div class="text-sm text-cyan-400 mt-2 font-black uppercase tracking-widest">數碼領袖</div>
+            </div>
+            <div onclick="reveal('usa')" class="card-map bg-slate-900 p-10 rounded-[3rem] border-slate-700 text-center hover:border-white">
+                <div class="text-8xl mb-4">🇺🇸</div>
+                <div class="text-3xl font-black">美國</div>
+                <div class="text-sm text-slate-400 mt-2 font-black uppercase tracking-widest">安全聯絡</div>
+            </div>
+            <div onclick="reveal('sweden')" class="card-map bg-slate-900 p-10 rounded-[3rem] border-slate-700 text-center hover:border-yellow-500">
+                <div class="text-8xl mb-4">🇸🇪</div>
+                <div class="text-3xl font-black">瑞典</div>
+                <div class="text-sm text-yellow-500 mt-2 font-black uppercase tracking-widest">平衡反思</div>
+            </div>
+        </div>
+
+        <!-- Intel Result Box -->
+        <div id="intel-box" class="bg-slate-900 rounded-[4rem] p-16 md:p-24 border-8 border-slate-800 hidden animate-slide shadow-2xl">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-20">
+                <div class="text-center lg:text-left">
+                    <div id="i-flag" class="text-[14rem] mb-6 leading-none">🚩</div>
+                    <h3 id="i-country" class="text-7xl font-black mb-4">國家/地區</h3>
+                    <div id="i-stance" class="inline-block px-10 py-3 bg-red-600 text-white text-3xl font-black rounded-3xl mb-10">禁止</div>
+                </div>
+                <div class="flex flex-col justify-center space-y-12">
+                    <div>
+                        <h4 class="text-orange-500 font-black text-3xl uppercase tracking-widest mb-4">情報摘要 (Brief)</h4>
+                        <p id="i-desc" class="text-4xl text-white leading-tight font-medium">請在上方選擇地區...</p>
+                    </div>
+                    <div class="bg-slate-800 p-12 rounded-[3.5rem] border-l-[20px] border-emerald-500">
+                        <h5 class="text-emerald-400 font-black text-2xl mb-4 uppercase">對應價值 (Value)</h5>
+                        <p id="i-value" class="text-4xl text-slate-100 font-bold leading-snug">自律、守法</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: Data & National Security -->
+    <section class="mb-40 max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+            <h2 class="text-6xl font-black text-white mb-6">📊 情報數據中心</h2>
+            <p class="text-4xl text-slate-400">數據是議論文最強的「子彈」</p>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-12">
+            <div class="lg:col-span-3">
+                <div class="chart-container">
+                    <canvas id="pisaBigChart"></canvas>
+                </div>
+            </div>
+            <div class="lg:col-span-2 space-y-8">
+                <div class="bg-indigo-900/40 p-12 rounded-[3.5rem] border-4 border-indigo-500/50">
+                    <h4 class="text-indigo-300 font-black text-3xl mb-4">🛡️ 網絡安全任務</h4>
+                    <p class="text-2xl text-slate-300 leading-relaxed font-bold">
+                        捍衛網絡空間安全是「總體國家安全觀」的一部分。個人的專注力與資訊素養，是國家強盛的基礎。
+                    </p>
+                </div>
+                <div class="bg-orange-900/40 p-12 rounded-[3.5rem] border-4 border-orange-500/50">
+                    <h4 class="text-orange-300 font-black text-3xl mb-4">⚖️ 守法與責任</h4>
+                    <p class="text-2xl text-slate-300 leading-relaxed font-bold">
+                        網絡非外之地。拒絕網絡欺凌與假資訊，這不僅是個人操守，更是維護社會穩定的法律義務。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Logic Training Camp (Quiz with Progress) -->
+    <section id="quiz-section" class="mb-40 bg-slate-900 p-16 md:p-24 rounded-[5rem] border-8 border-indigo-600 shadow-[0_0_100px_rgba(79,70,229,0.3)]">
+        <div class="flex justify-between items-end mb-12">
+            <div>
+                <h2 class="text-6xl font-black text-white mb-4">🧠 特工邏輯測試</h2>
+                <p class="text-3xl text-indigo-300">回答問題，提升你的辯論等級！</p>
+            </div>
+            <div class="text-right">
+                <div class="text-4xl font-black text-white mb-2"><span id="q-current">0</span> / <span id="q-total">5</span></div>
+                <div class="w-64 h-8 bg-slate-800 rounded-full overflow-hidden border-2 border-slate-700">
+                    <div id="q-progress" class="progress-bar-inner h-full bg-gradient-to-r from-indigo-500 to-cyan-400" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="quiz-ui" class="max-w-5xl mx-auto">
+            <div class="bg-black p-16 rounded-[4rem] border-4 border-slate-800 mb-12 text-center min-h-[350px] flex items-center justify-center">
+                <h3 id="quiz-text" class="text-5xl font-black leading-tight">準備好接收你的邏輯挑戰了嗎？</h3>
+            </div>
+            <div id="quiz-options" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Injected via JS -->
+            </div>
+            <div id="quiz-feedback" class="mt-12 text-center text-4xl font-black p-12 rounded-[3rem] hidden animate-slide"></div>
+            
+            <div class="mt-16 flex justify-center">
+                <button id="quiz-start-btn" onclick="startMission()" class="text-4xl px-20 py-10 bg-indigo-600 hover:bg-indigo-500 text-white rounded-[4rem] font-black shadow-2xl transition hover:scale-105">
+                    開始任務 START
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Writing Lab 3.0 -->
+    <section class="mb-40">
+        <div class="text-center mb-16">
+            <h2 class="text-6xl font-black text-white bg-orange-600 px-20 py-8 rounded-[4rem] shadow-2xl inline-block transform -rotate-1">
+                🏗️ 議論文構建實驗室 (v3.0)
+            </h2>
+        </div>
+
+        <div class="bg-slate-900 rounded-[5rem] shadow-2xl overflow-hidden border-8 border-slate-800">
+            <!-- Attack/Counter Toggles -->
+            <div class="flex bg-slate-950 p-4">
+                <button id="tab-attack" onclick="setMode('attack')" class="flex-1 py-12 text-5xl font-black rounded-[3.5rem] bg-orange-600 text-white shadow-xl transition">
+                    🔥 論點進攻
+                </button>
+                <button id="tab-counter" onclick="setMode('counter')" class="flex-1 py-12 text-5xl font-black rounded-[3.5rem] text-slate-500 hover:bg-slate-800 transition">
+                    🛡️ 邏輯反擊
+                </button>
+            </div>
+
+            <div class="p-12 md:p-24">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-16 mb-24">
+                    <div class="space-y-10">
+                        <label class="text-3xl font-black text-slate-500 uppercase">1. 立場 (Top Bun)</label>
+                        <div id="lab-s1" class="space-y-8"></div>
+                    </div>
+                    <div class="space-y-10">
+                        <label class="text-3xl font-black text-slate-500 uppercase">2. 論點/據 (Filling)</label>
+                        <div id="lab-s2" class="space-y-8"></div>
+                    </div>
+                    <div class="space-y-10">
+                        <label class="text-3xl font-black text-slate-500 uppercase">3. 價值 (Sauce)</label>
+                        <div id="lab-s3" class="space-y-8"></div>
+                    </div>
+                </div>
+
+                <!-- Live Output -->
+                <div class="bg-black p-20 rounded-[4rem] border-8 border-orange-500/50 relative shadow-inner">
+                    <div class="flex justify-between items-center mb-12">
+                        <h4 class="text-orange-500 font-black text-5xl flex items-center">
+                            <span class="mr-6">📄</span> 生成報告預覽
+                        </h4>
+                        <button onclick="copyDraft()" class="bg-orange-600 hover:bg-orange-500 text-white px-12 py-6 rounded-[2.5rem] text-3xl font-black shadow-xl transition">
+                            複製報告
+                        </button>
+                    </div>
+                    <div id="final-out" class="text-5xl md:text-6xl text-slate-200 leading-[1.5] font-medium min-h-[400px]">
+                        請在上方選擇內容以組建你的「論證三文治」報告...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="text-center py-24 border-t-8 border-slate-900">
+        <p class="text-5xl font-black text-emerald-500 italic mb-6 tracking-tighter">MISSION ACCOMPLISHED v3.0</p>
+        <p class="text-2xl text-slate-600 font-bold">結合全球政策分析、數據驅動與國家安全價值觀教學</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // --- 1. INTEL DATA ---
+        const intel = {
+            france: { f: '🇫🇷', c: '法國', s: '禁止', d: '立法禁止手機，將學校打造為「數碼避風港」，保護學生免受霸凌與成癮侵害。', v: '身心健康、紀律' },
+            china: { f: '🇨🇳', c: '中國', s: '限制', d: '「五項管理」規定：原則上禁止帶手機入校，保護視力並防止沉迷。', v: '自律、國家未來' },
+            netherlands: { f: '🇳🇱', c: '荷蘭', s: '禁止', d: '禁止課堂使用後，學生在小息的真實互動顯著增加，改善校園氛圍。', v: '群體生活、專注' },
+            singapore: { f: '🇸🇬', c: '新加坡', s: '限制', d: '將政策擴大至整個上學日，強制學生進行面對面社交，培養數碼習慣。', v: '社交能力、健康生活' },
+            uk: { f: '🇬🇧', c: '英國', s: '禁止', d: '賦予教師搜查權，將手機視為破壞秩序的源頭，全力重建校園權威。', v: '尊重權威、秩序' },
+            estonia: { f: '🇪🇪', c: '愛沙尼亞', s: '開放', d: '視手機為學習 AI 的入口。認為禁止手機等於與未來脫節，強調自主學習。', v: '創新、自主學習' },
+            usa: { f: '🇺🇸', c: '美國', s: '平衡', d: '因家長安全焦慮需緊急聯絡，手機被視為彌合數碼鴻溝的公平工具。', v: '安全感、公平' },
+            sweden: { f: '🇸🇪', c: '瑞典', s: '平衡', d: '低年級回歸紙本，高年級使用數碼工具。證明科技需平衡而非一刀切。', v: '審辯式思維、中庸' }
+        };
+
+        function reveal(id) {
+            const d = intel[id];
+            const box = document.getElementById('intel-box');
+            box.classList.remove('hidden');
+            document.getElementById('i-flag').innerText = d.f;
+            document.getElementById('i-country').innerText = d.c;
+            document.getElementById('i-stance').innerText = d.s;
+            document.getElementById('i-desc').innerText = d.d;
+            document.getElementById('i-value').innerText = d.v;
+            box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // --- 2. CHART ---
+        const initChart = () => {
+            const ctx = document.getElementById('pisaBigChart').getContext('2d');
+            Chart.defaults.font.size = 30;
+            Chart.defaults.color = '#94a3b8';
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['專注戰士', '一般學生', '手機喪屍'],
+                    datasets: [{
+                        label: '數學能力評分',
+                        data: [520, 500, 485],
+                        backgroundColor: ['#10b981', '#3b82f6', '#ef4444'],
+                        borderRadius: 30,
+                        barThickness: 120
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { 
+                        y: { min: 460, grid: { color: '#1e293b' } },
+                        x: { ticks: { font: { size: 36, weight: '900' }, color: '#fff' } }
+                    }
+                }
+            });
+        };
+
+        // --- 3. QUIZ SYSTEM ---
+        const quizData = [
+            { q: "根據 UNESCO 數據，全球已有多少國家立法或指引禁止校園使用手機？", o: ["10%", "24%", "50%", "80%"], a: 1, f: "✅ 正確！約四分一國家已採取行動。" },
+            { q: "哪個國家立法將學校定義為「數碼避風港」以防網絡欺凌？", o: ["英國", "中國", "法國", "新加坡"], a: 2, f: "✅ 正確！法國於 2018 年通過相關法律。" },
+            { q: "瑞典近期教育改革的重點是什麼？", o: ["全面派發手機", "低年級回歸紙本手寫", "取消所有老師", "全部改用 AI"], a: 1, f: "✅ 沒錯！他們反思過度數位化對基礎能力的影響。" },
+            { q: "捍衛網絡安全和個人資訊素養，對應哪一個核心概念？", o: ["個人喜好", "總體國家安全觀", "手機品牌競爭", "學校節電政策"], a: 1, f: "✅ 正確！網絡安全是國家安全的重要部分。" },
+            { q: "PISA 研究顯示，在課堂被同學手機分心的學生，數學分數下降多少？", o: ["2 分", "5 分", "15 分", "不降反升"], a: 2, f: "✅ 正確！15 分相當於落後約半年進度。" }
+        ];
+
+        let quizIdx = 0;
+        document.getElementById('q-total').innerText = quizData.length;
+
+        function startMission() {
+            quizIdx = 0;
+            document.getElementById('quiz-start-btn').classList.add('hidden');
+            renderQ();
+        }
+
+        function renderQ() {
+            const d = quizData[quizIdx];
+            document.getElementById('q-current').innerText = quizIdx + 1;
+            document.getElementById('q-progress').style.width = ((quizIdx + 1) / quizData.length * 100) + "%";
+            
+            document.getElementById('quiz-text').innerText = d.q;
+            const box = document.getElementById('quiz-options');
+            box.innerHTML = '';
+            d.o.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "text-4xl p-10 bg-slate-800 border-4 border-slate-700 rounded-[3rem] text-left hover:bg-slate-700 font-bold transition-all";
+                btn.innerText = opt;
+                btn.onclick = () => checkQ(idx);
+                box.appendChild(btn);
+            });
+            document.getElementById('quiz-feedback').classList.add('hidden');
+        }
+
+        function checkQ(idx) {
+            const d = quizData[quizIdx];
+            const feed = document.getElementById('quiz-feedback');
+            feed.classList.remove('hidden');
+            if(idx === d.a) {
+                feed.className = "mt-12 text-center text-5xl font-black p-12 rounded-[3.5rem] bg-emerald-600 text-white shadow-2xl";
+                feed.innerText = d.f;
+                setTimeout(() => {
+                    quizIdx++;
+                    if(quizIdx < quizData.length) renderQ();
+                    else {
+                        document.getElementById('quiz-text').innerText = "🏆 任務完成！你已獲得特工寫作授權。";
+                        document.getElementById('quiz-options').innerHTML = '';
+                    }
+                }, 2500);
+            } else {
+                feed.className = "mt-12 text-center text-5xl font-black p-12 rounded-[3.5rem] bg-red-600 text-white shadow-2xl";
+                feed.innerText = "❌ 邏輯錯誤，再分析一下情報！";
+            }
+        }
+
+        // --- 4. WRITING LAB ---
+        let mode = 'attack';
+        const picks = { s1:'', s2:'', s3:'' };
+        const labData = {
+            attack: {
+                s1: [
+                    { id:'a1_1', text: "我認為學校應該嚴格禁止攜帶手機入校。" },
+                    { id:'a1_2', text: "我支持校園應實施「數碼避風港」政策，限制手機使用。" }
+                ],
+                s2: [
+                    { id:'a2_1', text: "以法國及荷蘭為例，禁令有效防止了網絡欺凌，並顯著增加了學生的真實社交互動。" },
+                    { id:'a2_2', text: "根據 PISA 數據，手機分心會導致數學成績下降 15 分，證明手機是課堂專注力的殺手。" }
+                ],
+                s3: [
+                    { id:'a3_1', text: "這體現了自律的重要性。學會何時「放下手機」，是比拿起手機更重要的現代素養。" },
+                    { id:'a3_2', text: "這有助於維護法紀與校園穩定，讓學生在健康的數碼環境中成長為負責任的公民。" }
+                ]
+            },
+            counter: {
+                s1: [
+                    { id:'c1_1', text: "有人認為手機是私有財產，學校無權沒收，但我認為集體學習權優於個人自由。" },
+                    { id:'c1_2', text: "雖然家長擔心緊急聯絡問題，但我認為真正的安全來自學校系統而非個人裝置。" }
+                ],
+                s2: [
+                    { id:'c2_1', text: "正如新加坡的政策顯示，真正的安全來自於對程序和系統的信任與遵守，而非依賴手機傳播消息。" },
+                    { id:'c2_2', text: "瑞典的例子告訴我們，過度依賴科技反而會削弱基礎能力。自律才是成為科技主人的關鍵。" }
+                ],
+                s3: [
+                    { id:'c3_1', text: "因此，建立紀律並非侵犯自由，而是為了保護所有人都能享有不受干擾的公平學習機會。" },
+                    { id:'c3_2', text: "這體現了守法精神與國民素質，唯有注意力集中的群體，才能應對未來的國防與發展挑戰。" }
+                ]
+            }
+        };
+
+        function setMode(m) {
+            mode = m;
+            document.getElementById('tab-attack').className = m === 'attack' ? 'flex-1 py-12 text-5xl font-black rounded-[3.5rem] bg-orange-600 text-white shadow-xl transition' : 'flex-1 py-12 text-5xl font-black rounded-[3.5rem] text-slate-500 hover:bg-slate-800 transition';
+            document.getElementById('tab-counter').className = m === 'counter' ? 'flex-1 py-12 text-5xl font-black rounded-[3.5rem] bg-indigo-600 text-white shadow-xl transition' : 'flex-1 py-12 text-5xl font-black rounded-[3.5rem] text-slate-500 hover:bg-slate-800 transition';
+            picks.s1 = ''; picks.s2 = ''; picks.s3 = '';
+            renderLab();
+            updateOut();
+        }
+
+        function renderLab() {
+            const d = labData[mode];
+            ['s1', 's2', 's3'].forEach(s => {
+                const box = document.getElementById('lab-' + s);
+                box.innerHTML = d[s].map(o => `
+                    <div id="${o.id}" class="p-8 border-4 border-slate-700 rounded-[2.5rem] text-2xl font-bold text-slate-400 cursor-pointer hover:border-orange-500 transition-all leading-snug" onclick="pick('${s}', '${o.id}', '${o.text}')">
+                        ${o.text}
+                    </div>
+                `).join('');
+            });
+        }
+
+        function pick(s, id, t) {
+            const d = labData[mode];
+            d[s].forEach(o => document.getElementById(o.id)?.classList.remove('writing-option-active'));
+            document.getElementById(id).classList.add('writing-option-active');
+            picks[s] = t;
+            updateOut();
+        }
+
+        function updateOut() {
+            const out = document.getElementById('final-out');
+            const full = (picks.s1 + " " + picks.s2 + " " + picks.s3).trim();
+            out.innerHTML = full || "請在上方選擇模組以組建你的「論證三文治」報告...";
+        }
+
+        function copyDraft() {
+            const t = document.getElementById('final-out').innerText;
+            if(t.length < 5) return;
+            navigator.clipboard.writeText(t);
+            alert("✨ 報告已複製！可用於提交或朗讀。");
+        }
+
+        window.onload = () => {
+            initChart();
+            renderLab();
+        };
+    </script>
+</body>
+</html>
